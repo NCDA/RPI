@@ -1,0 +1,37 @@
+01-15-2014 Andy Lieblich Change log
+
+****Changes made to make it very easy(hopefully you all think the same :] ) to add new Rating calculators, see below for rules for making new calculators
+
+- Add calculatorBase file to hold calculatorBase class for calculators to extend off of
+
+- Move common functions form Exsisting RPI class to calculatorBase Class
+	setStartingSeason()
+
+- Move calculate from RPI.php to calculatorBase.php
+
+- Move sort() from RPI.php to calculatorBase.php
+
+- Move 4rating variable from teamForRPI class to teamRecord class in teamClasses.php
+
+- UpdateTeam methods now take in a single parameter taht is an array
+due to it beign an abstract method and subclass calculators may need
+differnt amount of parameters
+-----------------------------------------------------------------------------------
+
+**To add any more rating calculators and you wish you use base classes already here
+	you must apply the following:
+
+		1) In your team class extended off of teamRecord, you need to strictly have function namaded calcRating() that is used to calculate the rating to be stored
+		within the class itself
+
+		2) In your team class extended off of teamRecord, you need to strictly have function named getRating() which returns the rating (after already been calcuted by the calcRating() method). Needed for the sorting method in calculatorBase.
+
+		3) In your main rating calculator class extended off of calculatorBase, you need to implement updateTeam, and addToLeague method. See RPI.php and WinLoss.php for reference.
+
+
+** these rules are needed to limit code duplication between similar classes**
+
+-----------------------------------------------------------------------------------
+
+Feel free to email me at lieblic2@msu.edu or message me on Facebook with any questions.
+
