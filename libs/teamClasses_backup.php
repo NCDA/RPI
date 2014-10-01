@@ -38,7 +38,6 @@ class teamBase{
 class teamRecord extends teamBase{
   protected $wins = 0;
   protected $losses = 0;
-  protected $overtime = 0;
   protected $gamesPlayed;
   protected $rating;
   
@@ -72,20 +71,12 @@ class teamRecord extends teamBase{
     $this->gamesPlayed++;
   }
   
-  public function addOT(){
-  	$this->overtime++;
-  }
-  
   public function getWins(){
     return $this->wins;
   }
   
   public function getLosses(){
     return $this->losses;
-  }
-  public function getOT(){
-  	return $this->overtime;
-  	
   }
   
   public function getGamesPlayed(){
@@ -174,42 +165,3 @@ class teamForNHL extends teamRecord{
     return $this->points;
   }
 }
-
-class teamForGonzalez extends teamRecord{
-
-	function __construct($n, $i){
-		parent::__construct($n, $i);
-	//rating exchange, every teams starts with 40 points before exchanging ratings in match.
-	$this->rating = 40;
-}
-
-  public function exchangeWin($rate){
-   $this->rating += $rate;
-}
-
-  public function exchangeLoss($rate){
-   $this->rating -= $rate;
-}
-
-}
-class teamForPerrone extends teamRecord{
-	private  $wlp;
-	
-	function __construct($n, $i){
-	parent::__construct($n, $i);
-		
-	$this->wlP = 0;
-	
-}
-	public function getWLP(){
-	$this->wlp = ((($this->getWins() + $this->getOT()) - ($this->getLosses()))/ $this->getGamesPlayed());
-	return $this->wlp;
-}
-	public function addPoints($pts){
-	$this->rating += $pts;
-	
-}
-	
-}
-
-

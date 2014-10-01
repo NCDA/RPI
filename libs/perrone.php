@@ -1,0 +1,171 @@
+<?php
+// BCS class used to generate ratings Perrone  method
+//contains a league variable to hold the teams
+//contains DB connection to get teams for league
+
+
+//created 06-23-2014 Vanswa Garbutt
+
+require "libs/calculatorBase.php";
+require "DBConn.php";
+require "libs/teamClasses.php";
+require "libs/League.php";
+
+class perrone extends calculatorBase{
+  
+  function __construct(){
+    parent::__construct();
+  }
+   
+  //adds team to league if not already in it
+  //returns the index
+  protected function addToLeague($name, $id){
+    //check for an empty name. If empty it returns -1 and does not add the team
+    if(empty($name)){
+      return -1;
+    } else {
+      $index = $this->League->findTeamIndex($id);
+      if($index == -1){ // if it is -1 the team doesn't exist
+      	//make teamForPerrone object
+      	$team = new teamForPerrone($name, $id);
+      	//push into League while also getting its index
+	      return $this->League->addTeam($team);
+      } else {
+	       //is in league return the index
+	       return $index;
+      }
+    }
+  }
+  
+  //I am overloading this function because I have to calculate mine as a 
+  //running update per game instead of at the end of all win/loss of each team
+  //the 
+    protected function populateLeague(){
+    $startDate = $this->startYear . "-08-01";
+    $this->endDate = $this->endYear ."-07-01";
+    $query =  "SELECT date, event, event_id, w_team, l_team, w_id, l_id, ot,note, venue FROM results WHERE note not in ('S','JV', 'Ladies\'','Alumni','ASG') and date> '$startDate'  and date<'$this->endDate'";
+   
+    $results = $this->conn->executeSelectQuery($query);
+    
+    while($row = $results->fetch_assoc()){  
+      if($row["event_id"]){ //if there is an event id there was a game, I'm sure there is a better way to check...	
+    	//add the 2 teams into League
+    	//check if there was a jv team that played
+      	if(strpos($row["w_team"],'-JV') === false && strpos($row["l_team"],'-JV') === false) {
+      	  $winIndex = $this->addToLeague($row["w_team"], $row["w_id"]);
+      	  $loseIndex = $this->addToLeague($row["l_team"], $row["l_id"]);
+		  
+		
+		
+		  //I calculate each game in order from the fetched data in the table
+		 
+		  $record = array($row["venue"],$winIndex,$loseIndex, $row["ot"]);
+		 
+		  $this->updateTeam($record);
+      	}
+      }
+    }   
+    $this->conn->closeConnection();//done with the DB    
+  }
+
+  
+  protected function updateTeam($params){
+  
+    $venue = $params[0]; 
+    $winIndex = $params[1];
+    $lossIndex = $params[2];
+	$ot = $params[3];
+
+	
+    //check if team is playing itself
+    if($winIndex != $lossIndex){
+      $winner = $this->League->getTeamByIndex($winIndex);
+      $loser = $this->League->getTeamByIndex($lossIndex);
+      
+      $winner->addWin();
+      $loser->addLoss();
+      
+      if($ot == 1){
+      	$winner->addOT();
+      	$loser->addOT();
+      	echo 'yes';
+      	echo $ot;
+      	echo '</br>';
+      }
+      
+	 echo $winnerWLP = $winner->getWLP();
+	 echo $winner->getName();
+	 echo $winner->getGamesPlayed(); echo',';
+	 echo $winner->getWins(); echo ',';
+	 echo $winner->getOT();
+	 echo '</br>';
+	 echo $loserWLP = $loser->getWLP();
+	 echo $loser->getName();
+	 echo '</br>';
+       
+     if($winner->getName() == 'GSVU' || $loser->getName() == 'GSVU'){
+     	echo $winner->getName(). 'winner';
+     	echo $winner->getWLP();
+     	echo $winner->getWins();
+     	echo $winner->getGamesPlayed();
+     	
+     	echo $loser->getName(). 'lost';
+     	echo $loser->getWLP();
+     	echo $loser->getWins();
+     	echo $loser->getGamesPlayed();
+     }
+       //winner score exchange
+       
+		if ($loserWLP == 0) {
+			$winner->addPoints(2.5);
+		}elseif ($loserWLP > 0 && $loserWLP < .25){
+			$winner->addPoints(2.75);
+		}elseif ($loserWLP >= .25 && $loserWLP <= .499){
+			$winner->addPoints(3);
+		}elseif ($loserWLP >= .5 && $loserWLP < .75){
+			$winner->addPoints(3.25);
+		}elseif ($loserWLP > .75 && $loserWLP < 1){
+			$winner->addPoints(3.5);
+		}else{
+			$winner->addPoints(4);
+		}
+		
+		//loser in over time exchange 
+		if ($ot){
+			if ($winnerWLP == 0) {
+				$loser->addPoints(.875);
+			}elseif ($winnerWLP > 0 && $winnerWLP < .25){
+				$loser->addPoints(.9);
+			}elseif ($winnerWLP >= .25 && $winnerWLP <= .499){
+				$loser->addPoints(.925);
+			}elseif ($winnerWLP >= .5 && $winnerWLP < .75){
+				$loser->addPoints(.95);
+			}elseif ($winnerWLP > .75 && $winnerWLP < 1){
+				$loser->addPoints(.975);
+			}else{
+				$loser->addPoints(1.05);
+			}
+			
+		}else{
+			// regular loss not in overtime
+		if ($winnerWLP == 0) {
+				$loser->addPoints(-2);
+			}elseif ($winnerWLP > 0 && $winnerWLP < .25){
+				$loser->addPoints(-1.75);
+			}elseif ($winnerWLP >= .25 && $winnerWLP <= .499){
+				$loser->addPoints(-1.625);
+			}elseif ($winnerWLP >= .5 && $winnerWLP < .75){
+				$loser->addPoints(-1.5);
+			}elseif ($winnerWLP > .75 && $winnerWLP < 1){
+				$loser->addPoints(-1.375);
+			}else{
+				$loser->addPoints(-1.25);
+			}
+		}
+     }	
+  }
+
+}
+?>
+
+

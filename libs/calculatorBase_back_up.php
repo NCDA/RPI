@@ -1,6 +1,7 @@
 <?php 
 //01-10-2014 Andy Lieblich
 //base class for the rating calculators to extend off of
+//updated 04-01-2014 Vanswa Garbutt
 
 abstract class calculatorBase{
 	public 		$League;// made public to easily print out in html, not sure how to do it better
@@ -28,10 +29,14 @@ abstract class calculatorBase{
   //sets the starting year of the season to calculate,
   //then calls the method to populate the league
   //check if year is setm if not use default year
+  
+  //Vanswa: This new method sets the year to current year based on the default value of "Select season..." 
 	public function setStartingSeason($year){
-	  if($year != "Select season..."){
+	  if($year <> "Select season..."){
 	    $this->startYear = $year;     
-	  }   
+	  } else{
+		$this->startYear = date("Y") - 1;
+		}	  
 	  $this->endYear = $this->startYear + 1;
 	  $this->label = "$this->startYear/" . "$this->endYear";
 	  $this->populateLeague();
@@ -43,8 +48,8 @@ abstract class calculatorBase{
   //update the wins/losses and team played against
   protected function populateLeague(){
     $startDate = $this->startYear . "-08-01";
-    $this->endDate = $this->endYear ."-07-01";
-    $query = "SELECT date, event, event_id, w_team, l_team, w_id, l_id, ot,note, venue FROM results WHERE note not in ('S','JV','JV TIE', 'Ladies\'','Alumni','ASG') and date> '$startDate'  and date<'$this->endDate'";
+    $this->endDate = $this->endYear ."-07-01"; // -07-31
+    $query = "SELECT date, event, event_id, w_team, l_team, w_id, l_id, ot,note, venue FROM results WHERE note not in ('S','JV', 'Ladies\'','Alumni','ASG') and date> '$startDate'  and date<'$this->endDate'";
     
     $results = $this->conn->executeSelectQuery($query);
     

@@ -35,9 +35,9 @@ class League{
   } 
   
   public function findTeamIndex($id){
-    //check to see if a team is alraedy in the league
+    //check to see if a team is already in the league
     //by checking for id
-    //if found, returns the index so we dont have to 
+    //if found, returns the index so we don't have to 
     //look for it again
     //if not found, returns -1
     $index = 0;

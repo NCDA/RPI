@@ -8,7 +8,7 @@
 //updated 01-13-2014 Andy Lieblich
 
 require "libs/calculatorBase.php";
-require "libs/DBConn.php";
+require "DBConn.php";
 require "libs/teamClasses.php";
 require "libs/League.php";
 
