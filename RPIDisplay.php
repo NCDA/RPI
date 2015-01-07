@@ -19,7 +19,7 @@
   <div id="RPI_Holder">
   <form actiom="RPIDisplay.php" method="post" id="rpi_form">
       <select name="year" value="options">
-	<option value>Select season...</option>
+	<option value="Select season...">Select season...</option>
 	<option value="2010">2010/2011 Season</option>
 	<option value="2011">2011/2012 Season</option>
 	<option value="2012">2012/2013 Season</option>
