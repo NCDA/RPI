@@ -1,4 +1,4 @@
 RPI
 ===
 
-Ratings Percentage Index for College Dodgeball
+Ratings Percentage Index Algorithm for College Dodgeball
