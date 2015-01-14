@@ -1,0 +1,24 @@
+2014-01-19 Andrew Lieblich lieblic2@msu.edu
+
+How to add an additional rating calculator:
+
+- You need to add 2 classes:
+
+		1. A team class that extends off of teamRecord
+			- In this class you need the follow public method:
+					* calcRating() 	- takse no arguments
+													- calculates the rating for the individual team
+
+					** you can overload getRating is needed as long as your
+							new function doesn't take any parameters
+
+		2. A Rating class that extends off of calculatorBase
+			- In this class you need the following methods:
+					* addToLeague($name, $id) use the new team class you created in this class
+
+					*updateTeam($params) update your team class with the neccesary data from the database.
+						Takes an array as the only parameter, put as much or as little data that you need in the array.
+
+					*** If you need a separate query, overload the populateLeague method
+
+My class are in the libs folder for reference.
