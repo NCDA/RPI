@@ -24,7 +24,9 @@ class teamBase{
       return null;
     }
   }
-  
+   public function setName($r){
+   $this->name = $r;
+   }
    public function getId(){
     if($this->id != null){
       return $this->id;
@@ -208,8 +210,48 @@ class teamForPerrone extends teamRecord{
 	public function addPoints($pts){
 	$this->rating += $pts;
 	
+	}
 }
+
+class teamForView{
+
+	protected $teamName;
+	protected $date;
+	protected $win;
+	protected $ot;
+	protected $id;
 	
+function __construct($pTeam, $pDate, $pWin, $pOt, $pId){
+		$this->teamName = $pTeam;
+		$this->date = $pDate;
+		$this->win = $pWin;
+		$this->ot = $pOt;
+		$this->id = $pId;
+		
+	}
+	
+
+	
+	public function getName(){
+		return $this->teamName;
+	}
+	
+	public function getDate(){
+		return $this->date;
+	}
+	
+	public function getStatus(){
+		return $this->win;
+	}
+	
+	public function getOTStatus(){
+		return  $this->ot;
+	}
+	
+	public function getId(){
+		return $this->id;
+	}
 }
+
 
 
