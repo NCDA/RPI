@@ -5,8 +5,8 @@
 abstract class calculatorBase{
 	public 		$League;// made public to easily print out in html, not sure how to do it better
 	protected $conn;
-	protected $startYear = 2012;
-	protected $endYear = 2013;
+	protected $startYear = 2014;
+	protected $endYear = 2015;
 	//label to easily output the season being claculated
   public $label;
 	
