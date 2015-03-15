@@ -50,6 +50,16 @@
 	  </li>
       <?php  } ?>  
     </ul>
+	<table>
+      <?php
+	for($i=0;$i<$GONZALEZ->League->getNumOfTeams();$i++){
+	  $team =  $GONZALEZ->League->getTeamByIndex($i) ?>
+	  <tr>
+	    <td class="li_name"><?php echo $i+1 . "</td><td class='li_name'>" . $team->getName() . "</td><td class='li_id'>" . $team->getId() ?></td>
+	    <td class="li_rating"><?php echo number_format($team->getRating(), 5)?></td>
+	  </tr>
+      <?php  } ?>  
+    </table>
   </div>
 </body>
 </html>
