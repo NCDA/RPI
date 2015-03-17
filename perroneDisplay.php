@@ -1,16 +1,8 @@
 <?php  
   require "libs/perrone.php";
-
-  
-  
   $PERRONE = new PERRONE();
-  
-
-  
   if($_POST){
-    
     $PERRONE->setStartingSeason($_POST["year"]);
- 
   } else {
     $PERRONE->setStartingSeason("Select season...");
   }
@@ -40,16 +32,17 @@
       <input type="submit" value="Calculate" id="btn_calc">
     </form>
     <div id="label">Perrone ratings for the <?php echo $PERRONE->label; ?> season.</div>
-    <ul>
+	<table>
       <?php
 	for($i=0;$i<$PERRONE->League->getNumOfTeams();$i++){
 	  $team =  $PERRONE->League->getTeamByIndex($i) ?>
-	  <li>
-	    <span class="li_name"><?php echo $i+1 . ". " . $team->getName()?></span>
-	    <span class="li_rating"><?php echo number_format($team->getRating(), 5)?></span>
-	  </li>
+	  <tr>
+	    <td> <?php echo $i+1 ?></td>
+		<td class="li_name"><?php echo $team->getName()?></td>
+	    <td class="li_rating"><?php echo number_format($team->getRating(), 5)?></td>
+	  </tr>
       <?php  } ?>  
-    </ul>
+    </table>
   </div>
 </body>
 </html>

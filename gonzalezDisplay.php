@@ -1,16 +1,8 @@
 <?php  
   require "libs/gonzalez.php";
-
-  
-  
   $GONZALEZ = new GONZALEZ();
-  
-
-  
   if($_POST){
-    
     $GONZALEZ->setStartingSeason($_POST["year"]);
- 
   } else {
     $GONZALEZ->setStartingSeason("Select season...");
   }
@@ -21,7 +13,7 @@
 <html>
 <head>
 
-  <title>NCDA RPI Gonzalez Ratings: <?php echo $GONZALEZ->label; ?> season</title>
+  <title>NCDA Gonzalez Ratings: <?php echo $GONZALEZ->label; ?> season</title>
    <LINK href="css/andys_sweet_styles.css" rel="stylesheet" type="text/css">
    
 </head>
@@ -40,16 +32,17 @@
       <input type="submit" value="Calculate" id="btn_calc">
     </form>
     <div id="label">Gonzalez RPI ratings for the <?php echo $GONZALEZ->label; ?> season.</div>
-    <ul>
+	<table>
       <?php
 	for($i=0;$i<$GONZALEZ->League->getNumOfTeams();$i++){
 	  $team =  $GONZALEZ->League->getTeamByIndex($i) ?>
-	  <li>
-	    <span class="li_name"><?php echo $i+1 . ". " . $team->getName()?></span>
-	    <span class="li_rating"><?php echo number_format($team->getRating(), 5)?></span>
-	  </li>
+	  <tr>
+	    <td> <?php echo $i+1 ?></td>
+		<td class="li_name"><?php echo $team->getName()?></td>
+	    <td class="li_rating"><?php echo number_format($team->getRating(), 5)?></td>
+	  </tr>
       <?php  } ?>  
-    </ul>
+    </table>
   </div>
 </body>
 </html>
