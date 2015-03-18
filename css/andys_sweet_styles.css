@@ -37,6 +37,21 @@
   background-color: #bada55;
 }
 
+#RPI_Holder tr:nth-child(odd) { 
+ /* background: #c4e3ed; */
+ background-color: #e7ebe5;
+  
+}
+
+#RPI_Holder tr:nth-child(even) { 
+  background: #f3f1f4; 
+ 
+}
+
+#RPI_Holder tr:hover{
+  background-color: #bada55;
+}
+
 .li_rating{
   float: right;
   margin-right: 40px;

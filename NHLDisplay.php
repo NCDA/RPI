@@ -29,16 +29,17 @@
       <input type="submit" value="Calculate" id="btn_calc">
     </form>
     <div id="label">NHL ratings for the <?php echo $NHL->label; ?> season.</div>
-    <ul>
+	<table>
       <?php
 	for($i=0;$i<$NHL->League->getNumOfTeams();$i++){
 	  $team =  $NHL->League->getTeamByIndex($i) ?>
-	  <li>
-	    <span class="li_name"><?php echo $i+1 . ". " . $team->getName()?></span>
-	    <span class="li_rating"><?php echo number_format($team->getRating(), 5)?></span>
-	  </li>
+	  <tr>
+	    <td> <?php echo $i+1 ?></td>
+		<td class="li_name"><?php echo $team->getName()?></td>
+	    <td class="li_rating"><?php echo number_format($team->getRating(), 5)?></td>
+	  </tr>
       <?php  } ?>  
-    </ul>
+    </table>
   </div>
 </body>
 </html>

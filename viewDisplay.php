@@ -1,8 +1,6 @@
 <?php
 require "libs/view.php";
-
 $VIEW = new VIEW();
-
 if($_POST){
     $VIEW->setStartingSeason($_POST["year"]);
   } else {

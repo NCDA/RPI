@@ -1,5 +1,5 @@
 <?php
-// BCS class used to generate ratings Perrone  method
+// BCS class used to generate ratings Perrone method
 //contains a league variable to hold the teams
 //contains DB connection to get teams for league
 
@@ -54,9 +54,6 @@ class perrone extends calculatorBase{
       	if(strpos($row["w_team"],'-JV') === false && strpos($row["l_team"],'-JV') === false) {
       	  $winIndex = $this->addToLeague($row["w_team"], $row["w_id"]);
       	  $loseIndex = $this->addToLeague($row["l_team"], $row["l_id"]);
-		  
-		
-		
 		  //I calculate each game in order from the fetched data in the table
 		 
 		  $record = array($row["venue"],$winIndex,$loseIndex, $row["ot"]);

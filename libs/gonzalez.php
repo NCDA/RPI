@@ -64,11 +64,6 @@ class gonzalez extends calculatorBase{
     }   
     $this->conn->closeConnection();//done with the DB    
   }
-
-  
-  
-  
-  
   //I am changing this to work with the IRB method. I have to calculate ratings in real time based on matches in order
   // based on the International Rugby Board (IRB) .1 (.5 for overtime) * ((loserRating(+3 if home team)) - (winnerRating (+3 if home team))) + 1; 
   protected function updateTeam($params){
