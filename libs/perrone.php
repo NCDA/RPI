@@ -1,5 +1,5 @@
 <?php
-// BCS class used to generate ratings Perrone  method
+// BCS class used to generate ratings Perrone method
 //contains a league variable to hold the teams
 //contains DB connection to get teams for league
 
@@ -54,9 +54,6 @@ class perrone extends calculatorBase{
       	if(strpos($row["w_team"],'-JV') === false && strpos($row["l_team"],'-JV') === false) {
       	  $winIndex = $this->addToLeague($row["w_team"], $row["w_id"]);
       	  $loseIndex = $this->addToLeague($row["l_team"], $row["l_id"]);
-		  
-		
-		
 		  //I calculate each game in order from the fetched data in the table
 		 
 		  $record = array($row["venue"],$winIndex,$loseIndex, $row["ot"]);
@@ -85,25 +82,33 @@ class perrone extends calculatorBase{
       $winner->addWin();
       $loser->addLoss();
       
-      if($ot == 1){
+      if($ot){
       	$winner->addOT();
       	$loser->addOT();
       	echo 'yes';
       	echo $ot;
       	echo '</br>';
+      	echo gettype($ot);
+      }else{
+      	echo 'no';
+      	echo $ot;
+      	echo gettype($ot);
+      	echo '</br>';
       }
       
-	 echo $winnerWLP = $winner->getWLP();
-	 echo $winner->getName();
-	 echo $winner->getGamesPlayed(); echo',';
-	 echo $winner->getWins(); echo ',';
-	 echo $winner->getOT();
+	 echo $winner->getName(); echo 'WLP'; echo $winnerWLP = $winner->getWLP(); echo',';
+	 echo 'GP'; echo $winner->getGamesPlayed(); echo',';
+	 echo 'W'; echo $winner->getWins(); echo ',';
+	 echo 'OT'; echo $winner->getOT(); 
 	 echo '</br>';
-	 echo $loserWLP = $loser->getWLP();
-	 echo $loser->getName();
+	  echo $loser->getName(); echo 'WLP'; echo $loserWLP = $loser->getWLP(); echo',';
+	  echo 'GP'; echo $loser->getGamesPlayed();  echo',';
+	  echo 'W'; echo $loser->getWins(); echo ',';
+	  echo 'OT'; echo $loser->getOT();
 	 echo '</br>';
        
-     if($winner->getName() == 'GSVU' || $loser->getName() == 'GSVU'){
+	   
+     if(trim($winner->getName(), $character_mask = " \t\n\r\0\x0B" ) == "gsvu" || trim($loser->getName(), $character_mask = " \t\n\r\0\x0B" ) == 'GSVU'){
      	echo $winner->getName(). 'winner';
      	echo $winner->getWLP();
      	echo $winner->getWins();

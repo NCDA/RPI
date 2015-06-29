@@ -29,9 +29,12 @@ class League{
   
   public function getTeamByIndex($index){
   //get a team by the index
-    if($this->numOfTeams != 0){
+    if($this->numOfTeams != 0 && $index >-1){
       return $this->teams[$index];
-    }
+    }else 
+	$error =  $this->teams[0];
+	$error->setName("This is not a team");
+	return  $error;
   } 
   
   public function findTeamIndex($id){

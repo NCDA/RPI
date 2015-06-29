@@ -5,8 +5,8 @@
 abstract class calculatorBase{
 	public 		$League;// made public to easily print out in html, not sure how to do it better
 	protected $conn;
-	protected $startYear = 2012;
-	protected $endYear = 2013;
+	protected $startYear = 2014;
+	protected $endYear = 2015;
 	//label to easily output the season being claculated
   public $label;
 	
@@ -29,9 +29,11 @@ abstract class calculatorBase{
   //then calls the method to populate the league
   //check if year is setm if not use default year
 	public function setStartingSeason($year){
-	  if($year != "Select season..."){
+	  if($year <> "Select season..."){
 	    $this->startYear = $year;     
-	  }   
+	  } else{
+		$this->startYear = date("Y") - 1;
+		}	  
 	  $this->endYear = $this->startYear + 1;
 	  $this->label = "$this->startYear/" . "$this->endYear";
 	  $this->populateLeague();
