@@ -4,7 +4,7 @@
   if($_POST){
     $WinLoss->setStartingSeason($_POST["year"]);
   } else {
-    $WinLoss->setStartingSeason("Current Season");
+    $WinLoss->setStartingSeason("Select season...");
   }
   $WinLoss->calculate();
 ?>
