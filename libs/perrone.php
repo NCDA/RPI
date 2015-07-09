@@ -85,40 +85,12 @@ class perrone extends calculatorBase{
       if($ot){
       	$winner->addOT();
       	$loser->addOT();
-      	echo 'yes';
-      	echo $ot;
-      	echo '</br>';
-      	echo gettype($ot);
-      }else{
-      	echo 'no';
-      	echo $ot;
-      	echo gettype($ot);
-      	echo '</br>';
       }
       
-	 echo $winner->getName(); echo 'WLP'; echo $winnerWLP = $winner->getWLP(); echo',';
-	 echo 'GP'; echo $winner->getGamesPlayed(); echo',';
-	 echo 'W'; echo $winner->getWins(); echo ',';
-	 echo 'OT'; echo $winner->getOT(); 
-	 echo '</br>';
-	  echo $loser->getName(); echo 'WLP'; echo $loserWLP = $loser->getWLP(); echo',';
-	  echo 'GP'; echo $loser->getGamesPlayed();  echo',';
-	  echo 'W'; echo $loser->getWins(); echo ',';
-	  echo 'OT'; echo $loser->getOT();
-	 echo '</br>';
-       
-	   
-     if(trim($winner->getName(), $character_mask = " \t\n\r\0\x0B" ) == "gsvu" || trim($loser->getName(), $character_mask = " \t\n\r\0\x0B" ) == 'GSVU'){
-     	echo $winner->getName(). 'winner';
-     	echo $winner->getWLP();
-     	echo $winner->getWins();
-     	echo $winner->getGamesPlayed();
-     	
-     	echo $loser->getName(). 'lost';
-     	echo $loser->getWLP();
-     	echo $loser->getWins();
-     	echo $loser->getGamesPlayed();
-     }
+	  $winnerWLP = $winner->getWLP(); 
+	
+	  $loserWLP = $loser->getWLP();
+	 
        //winner score exchange
        
 		if ($loserWLP == 0) {
