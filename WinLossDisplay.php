@@ -4,7 +4,7 @@
   if($_POST){
     $WinLoss->setStartingSeason($_POST["year"]);
   } else {
-    $WinLoss->setStartingSeason("Current Season");
+    $WinLoss->setStartingSeason("Select season...");
   }
   $WinLoss->calculate();
 ?>
@@ -36,7 +36,9 @@
 	  <tr>
 	    <td> <?php echo $i+1 ?></td>
 		<td class="li_name"><?php echo $team->getName()?></td>
-	    <td class="li_rating"><?php echo number_format($team->getRating(), 5)?></td>
+	    <td class="li_rating"><?php echo number_format($team->getRating(), 3) * 100 ?>%</td>
+		<td class="li_test"><?php echo $team->getGamesPlayed()?></td>
+		<td class="li_test"><?php echo $team->getId()?></td>
 	  </tr>
       <?php  } ?>  
     </table>
