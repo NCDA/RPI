@@ -1,6 +1,6 @@
 <?php
 
-require "DBConn.php";
+require "libs/DBConn.php";
 require "libs/teamClasses.php";
 require "libs/League.php";
 
@@ -9,6 +9,7 @@ require "libs/League.php";
 	protected $startYear = 2014;
 	protected $endYear = 2015;
 	public $label;
+	protected $teamArray = array();
 	
 	function __construct(){
 		$this->League = new League();
@@ -51,17 +52,23 @@ require "libs/League.php";
 		$startDate = $this->startYear . "-08-01";
 		$this->endDate = $this->endYear ."-07-01";
 		$query = "SELECT date, event, event_id, w_team, l_team, w_id, l_id, ot,note, venue FROM results WHERE note not in ('S','JV','JV TIE', 'Ladies\'','Alumni','ASG') and date> '$startDate'  and date<'$this->endDate'";
-	
+		$teamQuery = "SELECT join_id, acronym FROM teams";
 		$results = $this->conn->executeSelectQuery($query);
+		 $teamResults = $this->conn->executeSelectQuery($teamQuery);
+		//store team data into array 
+		$teamArray[0] = "skipped";
+		while($teamData = $teamResults->fetch_assoc()){
+			$teamArray[$teamData["join_id"]] = $teamData["acronym"];
+		}
 	
 		while($row = $results->fetch_assoc()){
 			if($row["event_id"]){ 
-				if(strpos($row["w_team"],'-JV') === false && strpos($row["l_team"],'-JV') === false) {
-					$winIndex = $this->addToLeague($row["w_team"], $row["w_id"]);
-					$loseIndex = $this->addToLeague($row["l_team"], $row["l_id"]);
+				if(strpos($teamArray[$row["w_id"]],'-JV') === false && strpos($teamArray[$row["l_id"]],'-JV') === false) {
+					$winIndex = $this->addToLeague($teamArray[$row["w_id"]], $row["w_id"]);
+					$loseIndex = $this->addToLeague($teamArray[$row["w_id"]], $row["l_id"]);
 					//create teamForView to store information about match to parse later and display
-					$wteam = new teamForView($row["w_team"],$row["date"],false,$row["ot"], $row["w_id"]);
-					$lteam = new teamForView($row["l_team"],$row["date"],true,$row["ot"], $row["l_id"]);
+					$wteam = new teamForView($teamArray[$row["w_id"]],$row["date"],false,$row["ot"], $row["w_id"]);
+					$lteam = new teamForView($teamArray[$row["l_id"]],$row["date"],true,$row["ot"], $row["l_id"]);
 					
 					$this->League->getTeamByIndex($this->League->findTeamIndex($row["w_id"]))->addTeamPlayed($lteam);
 					$this->League->getTeamByIndex($this->League->findTeamIndex($row["l_id"]))->addTeamPlayed($wteam);
