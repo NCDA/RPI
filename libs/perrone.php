@@ -7,12 +7,12 @@
 //created 06-23-2014 Vanswa Garbutt
 
 require "libs/calculatorBase.php";
-require "DBConn.php";
+require "libs/DBConn.php";
 require "libs/teamClasses.php";
 require "libs/League.php";
 
 class perrone extends calculatorBase{
-  
+  protected $teamArray = array();
   function __construct(){
     parent::__construct();
   }
@@ -44,8 +44,15 @@ class perrone extends calculatorBase{
     $startDate = $this->startYear . "-08-01";
     $this->endDate = $this->endYear ."-07-01";
     $query =  "SELECT date, event, event_id, w_team, l_team, w_id, l_id, ot,note, venue FROM results WHERE note not in ('S','JV', 'Ladies\'','Alumni','ASG') and date> '$startDate'  and date<'$this->endDate'";
-   
+    $teamQuery = "SELECT join_id, acronym FROM teams";
     $results = $this->conn->executeSelectQuery($query);
+	 $teamResults = $this->conn->executeSelectQuery($teamQuery);
+	//skip first entry
+	$teamArray[0] = "skipped";
+	//store team data into array 
+	while($teamData = $teamResults->fetch_assoc()){
+		$teamArray[$teamData["join_id"]] = $teamData["acronym"];
+	}
     
     while($row = $results->fetch_assoc()){  
       if($row["event_id"]){ //if there is an event id there was a game, I'm sure there is a better way to check...	
@@ -85,40 +92,12 @@ class perrone extends calculatorBase{
       if($ot){
       	$winner->addOT();
       	$loser->addOT();
-      	echo 'yes';
-      	echo $ot;
-      	echo '</br>';
-      	echo gettype($ot);
-      }else{
-      	echo 'no';
-      	echo $ot;
-      	echo gettype($ot);
-      	echo '</br>';
       }
       
-	 echo $winner->getName(); echo 'WLP'; echo $winnerWLP = $winner->getWLP(); echo',';
-	 echo 'GP'; echo $winner->getGamesPlayed(); echo',';
-	 echo 'W'; echo $winner->getWins(); echo ',';
-	 echo 'OT'; echo $winner->getOT(); 
-	 echo '</br>';
-	  echo $loser->getName(); echo 'WLP'; echo $loserWLP = $loser->getWLP(); echo',';
-	  echo 'GP'; echo $loser->getGamesPlayed();  echo',';
-	  echo 'W'; echo $loser->getWins(); echo ',';
-	  echo 'OT'; echo $loser->getOT();
-	 echo '</br>';
-       
-	   
-     if(trim($winner->getName(), $character_mask = " \t\n\r\0\x0B" ) == "gsvu" || trim($loser->getName(), $character_mask = " \t\n\r\0\x0B" ) == 'GSVU'){
-     	echo $winner->getName(). 'winner';
-     	echo $winner->getWLP();
-     	echo $winner->getWins();
-     	echo $winner->getGamesPlayed();
-     	
-     	echo $loser->getName(). 'lost';
-     	echo $loser->getWLP();
-     	echo $loser->getWins();
-     	echo $loser->getGamesPlayed();
-     }
+	  $winnerWLP = $winner->getWLP(); 
+	
+	  $loserWLP = $loser->getWLP();
+	 
        //winner score exchange
        
 		if ($loserWLP == 0) {
