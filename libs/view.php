@@ -64,7 +64,7 @@ require "libs/League.php";
 	
 		while($row = $results->fetch_assoc()){
 			if($row["event_id"]){ 
-<<<<<<< HEAD
+
 			//skip any team that has jv in their name as it denotes a junior varsity game that did not count. 
 				if(strpos($teamArray[$row["w_id"]],'-JV') === false && strpos($teamArray[$row["l_id"]],'-JV') === false) {
 					if($row["w_id"] == 0 || $row["l_id"] == 0){
@@ -77,7 +77,7 @@ require "libs/League.php";
 				if(strpos($teamArray[$row["w_id"]],'-JV') === false && strpos($teamArray[$row["l_id"]],'-JV') === false) {
 					$winIndex = $this->addToLeague($teamArray[$row["w_id"]], $row["w_id"]);
 					$loseIndex = $this->addToLeague($teamArray[$row["w_id"]], $row["l_id"]);
->>>>>>> origin/vonstuben
+
 					//create teamForView to store information about match to parse later and display
 					$wteam = new teamForView($teamArray[$row["w_id"]],$row["date"],false,$row["ot"], $row["w_id"]);
 					$lteam = new teamForView($teamArray[$row["l_id"]],$row["date"],true,$row["ot"], $row["l_id"]);
