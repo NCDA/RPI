@@ -73,7 +73,7 @@ require "libs/League.php";
 					}
 					$winIndex = $this->addToLeague($teamArray[$row["w_id"]], $row["w_id"]);
 					$loseIndex = $this->addToLeague($teamArray[$row["l_id"]], $row["l_id"]);    
-=======
+					
 				if(strpos($teamArray[$row["w_id"]],'-JV') === false && strpos($teamArray[$row["l_id"]],'-JV') === false) {
 					$winIndex = $this->addToLeague($teamArray[$row["w_id"]], $row["w_id"]);
 					$loseIndex = $this->addToLeague($teamArray[$row["w_id"]], $row["l_id"]);
