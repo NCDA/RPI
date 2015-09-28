@@ -4,7 +4,7 @@
   if($_POST){
     $NHL->setStartingSeason($_POST["year"]);
   } else {
-    $NHL->setStartingSeason("Current Season");
+    $NHL->setStartingSeason("Select season...");
   }
   $NHL->calculate();
 ?>

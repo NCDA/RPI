@@ -12,22 +12,45 @@ class NHL extends calculatorBase{
     parent::__construct();
   }
 
+  public function setStartingSeason($year){
+		if($year <> "Select season..."){
+			$this->startYear = $year;
+		} else{
+			$this->startYear = date("Y") - 1;
+		}
+		$this->endYear = $this->startYear + 1;
+		$this->label = "$this->startYear/" . "$this->endYear";
+		$this->populateLeague();
+	
+	}
+	
 	//need to overload this function b/c this class needs an additonal 
 	//atribute from the results query (ot_id)
   protected function populateLeague(){
     $startDate = $this->startYear . "-08-01";
     $this->endDate = $this->endYear ."-07-01";
     $query = "SELECT date, event, event_id, w_team, l_team, w_id, l_id, ot_id FROM results WHERE event <> 'Scrimmage' and date> '$startDate' and date< '$this->endDate'";
-    
+    $teamQuery = "SELECT join_id, acronym FROM teams";
+	
     $results = $this->conn->executeSelectQuery($query);
-    
+	$teamResults = $this->conn->executeSelectQuery($teamQuery);
+	//store team data into array 
+	$teamArray[0] = "skipped";
+	while($teamData = $teamResults->fetch_assoc()){
+			$teamArray[$teamData["join_id"]] = $teamData["acronym"];
+	}
+	
     while($row = $results->fetch_assoc()){  
       if($row["event_id"]){ //if there is an event id there was a game, im sure there is a better way to check...	
     	//add the 2 teams into League
     	//check if there was a jv team that played
-      	if(strpos($row["w_team"],'-JV') === false && strpos($row["l_team"],'-JV') === false) {
-      	  $winIndex = $this->addToLeague($row["w_team"], $row["w_id"]);
-      	  $loseIndex = $this->addToLeague($row["l_team"], $row["l_id"]);
+      	if(strpos($teamArray[$row["w_id"]],'-JV') === false && strpos($teamArray[$row["l_id"]],'-JV') === false) {
+					if($row["w_id"] == 0 || $row["l_id"] == 0){
+						// skip matches that do not count i.e having a win or loss id of 0
+						continue;
+					}
+      	  $winIndex = $this->addToLeague($teamArray[$row["w_id"]], $row["w_id"]);
+      	  $loseIndex = $this->addToLeague($teamArray[$row["l_id"]], $row["l_id"]);
       	  //update the 2 teams win or lose, and add the team played
       	  $win_params = array($winIndex, $loseIndex, true, $row["ot_id"]);
       	  $loss_params = array($loseIndex, $winIndex, false, $row["ot_id"]);
