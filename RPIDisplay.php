@@ -4,7 +4,7 @@
   if($_POST){
     $RPI->setStartingSeason($_POST["year"]);
   } else {
-    $RPI->setStartingSeason("Current Season");
+    $RPI->setStartingSeason("Select season...");
   }
   $RPI->calculate();
 ?>
