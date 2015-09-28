@@ -7,6 +7,8 @@ abstract class calculatorBase{
 	protected $conn;
 	protected $startYear = 2014;
 	protected $endYear = 2015;
+	protected $teamArray = array();
+	
 	//label to easily output the season being claculated
   public $label;
 	
@@ -47,16 +49,28 @@ abstract class calculatorBase{
     $startDate = $this->startYear . "-08-01";
     $this->endDate = $this->endYear ."-07-01";
     $query = "SELECT date, event, event_id, w_team, l_team, w_id, l_id, ot,note, venue FROM results WHERE note not in ('S','JV','JV TIE', 'Ladies\'','Alumni','ASG') and date> '$startDate'  and date<'$this->endDate'";
-    
+    $teamQuery = "SELECT join_id, acronym FROM teams";
+	
     $results = $this->conn->executeSelectQuery($query);
-    
+	$teamResults = $this->conn->executeSelectQuery($teamQuery);
+    //execute query on team table for all ids and names
+	//make a team array told hold the results form the query 
+	//in a while loop for each name use team id to store in array
+	//skip first entry in array
+	$teamArray[0] = "skipped";
+		//store team data into array 
+	while($teamData = $teamResults->fetch_assoc()){
+		$teamArray[$teamData["join_id"]] = $teamData["acronym"];
+	}
+	
     while($row = $results->fetch_assoc()){  
       if($row["event_id"]){ //if there is an event id there was a game, im sure there is a better way to check...	
     	//add the 2 teams into League
     	//check if there was a jv team that played
-      	if(strpos($row["w_team"],'-JV') === false && strpos($row["l_team"],'-JV') === false) {
-      	  $winIndex = $this->addToLeague($row["w_team"], $row["w_id"]);
-      	  $loseIndex = $this->addToLeague($row["l_team"], $row["l_id"]);
+      	if(strpos($teamArray[$row["w_id"]],'-JV') === false && strpos($teamArray[$row["l_id"]],'-JV') === false) {
+			//change w_team / l_team to  array using w_id/l_id to get actual acronym for team
+      	  $winIndex = $this->addToLeague($teamArray[$row["w_id"]], $row["w_id"]);
+      	  $loseIndex = $this->addToLeague($teamArray[$row["l_id"]], $row["l_id"]);
       	  //update the 2 teams win or lose, and add the team played
       	  $win_params = array($winIndex, $loseIndex, true);
       	  $loss_params = array($loseIndex, $winIndex, false);
