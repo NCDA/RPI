@@ -60,6 +60,10 @@ class gonzalez extends calculatorBase{
     	//add the 2 teams into League
     	//check if there was a jv team that played
       	if(strpos($teamArray[$row["w_id"]],'-JV') === false && strpos($teamArray[$row["l_id"]],'-JV') === false) {
+			if($row["w_id"] == 0 || $row["l_id"] == 0){
+						// skip matches that do not count i.e having a win or loss id of 0
+						continue;
+					}
       	  $winIndex = $this->addToLeague($teamArray[$row["w_id"]], $row["w_id"]);
       	  $loseIndex = $this->addToLeague($teamArray[$row["l_id"]], $row["l_id"]);
 		  //I calculate each game in order from the fetched data in the table
