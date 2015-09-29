@@ -58,7 +58,7 @@ abstract class calculatorBase{
 	//in a while loop for each name use team id to store in array
 	//skip first entry in array
 	$teamArray[0] = "skipped";
-		//store team data into array 
+	//store team data into array 
 	while($teamData = $teamResults->fetch_assoc()){
 		$teamArray[$teamData["join_id"]] = $teamData["acronym"];
 	}
@@ -68,6 +68,10 @@ abstract class calculatorBase{
     	//add the 2 teams into League
     	//check if there was a jv team that played
       	if(strpos($teamArray[$row["w_id"]],'-JV') === false && strpos($teamArray[$row["l_id"]],'-JV') === false) {
+			if($row["w_id"] == 0 || $row["l_id"] == 0){
+						// skip matches that do not count i.e having a win or loss id of 0
+						continue;
+					}
 			//change w_team / l_team to  array using w_id/l_id to get actual acronym for team
       	  $winIndex = $this->addToLeague($teamArray[$row["w_id"]], $row["w_id"]);
       	  $loseIndex = $this->addToLeague($teamArray[$row["l_id"]], $row["l_id"]);
