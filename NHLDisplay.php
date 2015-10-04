@@ -20,7 +20,11 @@
   <form actiom="NHLDisplay.php" method="post" id="NHL_form">
     <select name="year" value="options">
 		<option value="Select season...">Select season...</option>
+<<<<<<< HEAD
 		<option value="2014">2015/2016 Season</option>
+=======
+		<option value="2015">2015/2016 Season</option>
+>>>>>>> origin/vonstuben
 		<option value="2014">2014/2015 Season</option>
 		<option value="2013">2013/2014 Season</option>
 		<option value="2012">2012/2013 Season</option>
