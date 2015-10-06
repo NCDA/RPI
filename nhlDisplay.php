@@ -34,10 +34,12 @@
       <?php
 	for($i=0;$i<$NHL->League->getNumOfTeams();$i++){
 	  $team =  $NHL->League->getTeamByIndex($i) ?>
-	  <tr>
+	 <tr>
 	    <td> <?php echo $i+1 ?></td>
 		<td class="li_name"><?php echo $team->getName()?></td>
-	    <td class="li_rating"><?php echo number_format($team->getRating(), 5)?></td>
+	    <td class="li_rating"><?php echo number_format($team->getRating(), 5) ?></td>
+		<td class="li_test"><?php echo $team->getGamesPlayed()?></td>
+		<td class="li_test"><?php echo $team->getId()?></td>
 	  </tr>
       <?php  } ?>  
     </table>

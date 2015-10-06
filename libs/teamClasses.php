@@ -41,7 +41,7 @@ class teamRecord extends teamBase{
   protected $wins = 0;
   protected $losses = 0;
   protected $overtime = 0;
-  protected $gamesPlayed;
+  protected $gamesPlayed = 0;
   protected $rating;
   
   function __construct($n, $i){  

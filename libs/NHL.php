@@ -96,11 +96,37 @@ class NHL extends calculatorBase{
       if($win){
       	//add 2 points for win, with or without ovetime
         $team->addPoints(2);
+		$team->addWin();
       } else {
       	if($ot){
       		//add 1 point for overtime loss
       		$team->addPoints(1);
+			$team->addLoss();
       	}
+      }
+    }
+  }
+  
+  ### nhl needs to overload the sort method to attribute to tie breakers.
+	#go through the league and check for equal ratings
+	  ## break ties by most games played
+	  ### then break by lowest team id
+	  public function sort(){
+    for($numOfPasses=0;$numOfPasses<$this->League->getNumOfTeams();$numOfPasses++){
+      //skip last iteration on the loop b/c there is nothing left to compare to
+      for($i=0; $i<$this->League->getNumOfTeams() -1; $i++){
+      	if($this->League->getTeamByIndex($i)->getRating() == $this->League->getTeamByIndex($i+1)->getRating()){
+      	  if($this->League->getTeamByIndex($i)->getGamesPlayed() < $this->League->getTeamByIndex($i+1)->getGamesPlayed()){
+			  $this->League->swap($i, $i+1);
+		  }elseif($this->League->getTeamByIndex($i)->getGamesPlayed() == $this->League->getTeamByIndex($i+1)->getGamesPlayed()){
+			  if($this->League->getTeamByIndex($i)->getId() > $this->League->getTeamByIndex($i+1)->getId()){
+				  $this->League->swap($i, $i+1);
+			  }
+		  }
+			  
+      	} elseif($this->League->getTeamByIndex($i)->getRating() < $this->League->getTeamByIndex($i+1)->getRating()){
+			$this->League->swap($i, $i+1);
+		}
       }
     }
   }
