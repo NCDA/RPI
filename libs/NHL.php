@@ -12,18 +12,6 @@ class NHL extends calculatorBase{
     parent::__construct();
   }
 
-  public function setStartingSeason($year){
-		if($year <> "Select season..."){
-			$this->startYear = $year;
-		} else{
-			$this->startYear = date("Y") - 1;
-		}
-		$this->endYear = $this->startYear + 1;
-		$this->label = "$this->startYear/" . "$this->endYear";
-		$this->populateLeague();
-	
-	}
-	
 	//need to overload this function b/c this class needs an additonal 
 	//atribute from the results query (ot_id)
   protected function populateLeague(){
