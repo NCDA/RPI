@@ -12,7 +12,7 @@
 <!doctype html>
 <html>
 <head>
-  <title>NCDA RPI Ratings: <?php echo $RPI->label; ?> season</title>
+  <title>NCDA Lieblich Ratings: <?php echo $RPI->label; ?> season</title>
    <LINK href="css/andys_sweet_styles.css" rel="stylesheet" type="text/css">
 </head>
 <body>
@@ -29,8 +29,13 @@
     </select>
       <input type="submit" value="Calculate" id="btn_calc">
     </form>
-    <div id="label">RPI ratings for the <?php echo $RPI->label; ?> season.</div>
+    <div id="label">Lieblich ratings for the <?php echo $RPI->label; ?> season.</div>
 	<table>
+	   <tr>
+		<th>Rank</th>
+		<th>Team</th>
+		<th>Rating</th>
+	   </tr>	
       <?php
 	for($i=0;$i<$RPI->League->getNumOfTeams();$i++){
 	  $team =  $RPI->League->getTeamByIndex($i) ?>

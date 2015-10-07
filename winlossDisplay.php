@@ -12,7 +12,7 @@
 <!doctype html>
 <html>
 <head>
-  <title>NCDA WinLoss Ratings: <?php echo $WinLoss->label; ?> season</title>
+  <title>NCDA Win Percentage: <?php echo $WinLoss->label; ?> season</title>
    <LINK href="css/andys_sweet_styles.css" rel="stylesheet" type="text/css">
 </head>
 <body>
@@ -29,8 +29,15 @@
     </select>
       <input type="submit" value="Calculate" id="btn_calc">
     </form>
-    <div id="label">WinLoss ratings for the <?php echo $WinLoss->label; ?> season.</div>
+    <div id="label">Win Percentage for the <?php echo $WinLoss->label; ?> season.</div>
 	<table>
+	   <tr>
+		<th>Rank</th>
+		<th>Team</th>
+		<th>W%</th>
+		<th>Games</th>
+		<th>ID</th>
+	   </tr>
       <?php
 	for($i=0;$i<$WinLoss->League->getNumOfTeams();$i++){
 	  $team =  $WinLoss->League->getTeamByIndex($i) ?>
@@ -44,5 +51,15 @@
       <?php  } ?>  
     </table>
   </div>
+  <aside>
+	<p>A team's win percentage (W%) is determined from the formula: Wins / (Wins + Losses) </p>
+	<p>Tie Breakers:</p>
+	<ol>
+		<li>Greater Win Percentage</li>
+		<li>Greater Games Played</li>
+		<li>lower Team ID (older teams get favor as the last tiebreaker)</li>
+	</ol>
+  </aside>
+  
 </body>
 </html>

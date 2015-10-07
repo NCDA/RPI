@@ -32,8 +32,13 @@
     </select>
       <input type="submit" value="Calculate" id="btn_calc">
     </form>
-    <div id="label">Gonzalez RPI ratings for the <?php echo $GONZALEZ->label; ?> season.</div>
+    <div id="label">Gonzalez Ratings for the <?php echo $GONZALEZ->label; ?> season.</div>
 	<table>
+	   <tr>
+		<th>Rank</th>
+		<th>Team</th>
+		<th>Rating</th>
+	   </tr>	
       <?php
 	for($i=0;$i<$GONZALEZ->League->getNumOfTeams();$i++){
 	  $team =  $GONZALEZ->League->getTeamByIndex($i) ?>
