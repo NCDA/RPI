@@ -83,7 +83,6 @@ class perrone extends calculatorBase{
     $lossIndex = $params[2];
 	$ot = $params[3];
 
-	
     //check if team is playing itself
     if($winIndex != $lossIndex){
       $winner = $this->League->getTeamByIndex($winIndex);
@@ -101,7 +100,6 @@ class perrone extends calculatorBase{
 	  $loserWLP = $loser->getWLP();
 	 
        //winner score exchange
-       
 		if ($loserWLP == 0) {
 			$winner->addPoints(2.5);
 		}elseif ($loserWLP > 0 && $loserWLP < .25){
