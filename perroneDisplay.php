@@ -38,15 +38,18 @@
 		<th>Rank</th>
 		<th>Team</th>
 		<th>Points</th>
+		<th>Games</th>
+		<th>ID</th>
 	   </tr>
       <?php
 	for($i=0;$i<$PERRONE->League->getNumOfTeams();$i++){
 	  $team =  $PERRONE->League->getTeamByIndex($i) ?>
 	  <tr>
-	    <td> <?php echo $i+1 ?></td>
+	   <td> <?php echo $i+1 ?></td>
 		<td class="li_name"><?php echo $team->getName()?></td>
-	    <td class="li_rating"><?php echo number_format($team->getRating(), 5)?></td>
-	  </tr>
+	    <td class="li_rating"><?php echo number_format($team->getRating(), 5) ?></td>
+		<td class="li_test"><?php echo $team->getGamesPlayed()?></td>
+		<td class="li_test"><?php echo $team->getId()?></td>
       <?php  } ?>  
     </table>
   </div>
