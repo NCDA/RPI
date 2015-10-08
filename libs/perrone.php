@@ -37,7 +37,7 @@ class perrone extends calculatorBase{
     }
   }
   
-//I am overloading this function because I have to calculate mine as a 
+  //I am overloading this function because I have to calculate mine as a 
   //running update per game instead of at the end of all win/loss of each team
   //the 
     protected function populateLeague(){
@@ -58,13 +58,10 @@ class perrone extends calculatorBase{
       if($row["event_id"]){ //if there is an event id there was a game, I'm sure there is a better way to check...	
     	//add the 2 teams into League
     	//check if there was a jv team that played
-      	if(strpos($teamArray[$row["w_id"]],'-JV') === false && strpos($teamArray[$row["l_id"]],'-JV') === false) {
-					if($row["w_id"] == 0 || $row["l_id"] == 0){
-						// skip matches that do not count i.e having a win or loss id of 0
-						continue;
-					}
-					$winIndex = $this->addToLeague($teamArray[$row["w_id"]], $row["w_id"]);
-					$loseIndex = $this->addToLeague($teamArray[$row["l_id"]], $row["l_id"]);    
+      	if(strpos($row["w_team"],'-JV') === false && strpos($row["l_team"],'-JV') === false) {
+      	  $winIndex = $this->addToLeague($row["w_team"], $row["w_id"]);
+      	  $loseIndex = $this->addToLeague($row["l_team"], $row["l_id"]);
+		  //I calculate each game in order from the fetched data in the table
 		 
 		  $record = array($row["venue"],$winIndex,$loseIndex, $row["ot"]);
 		 
@@ -83,6 +80,7 @@ class perrone extends calculatorBase{
     $lossIndex = $params[2];
 	$ot = $params[3];
 
+	
     //check if team is playing itself
     if($winIndex != $lossIndex){
       $winner = $this->League->getTeamByIndex($winIndex);
@@ -97,9 +95,11 @@ class perrone extends calculatorBase{
       }
       
 	  $winnerWLP = $winner->getWLP(); 
+	
 	  $loserWLP = $loser->getWLP();
 	 
        //winner score exchange
+       
 		if ($loserWLP == 0) {
 			$winner->addPoints(2.5);
 		}elseif ($loserWLP > 0 && $loserWLP < .25){
@@ -108,26 +108,11 @@ class perrone extends calculatorBase{
 			$winner->addPoints(3);
 		}elseif ($loserWLP >= .5 && $loserWLP < .75){
 			$winner->addPoints(3.25);
-		}elseif ($loserWLP >= .75 && $loserWLP < 1){
+		}elseif ($loserWLP > .75 && $loserWLP < 1){
 			$winner->addPoints(3.5);
 		}else{
 			$winner->addPoints(4);
 		}
-		
-		// loser points awarded
-		if ($winnerWLP == 0) {
-				$loser->addPoints(-2);
-			}elseif ($winnerWLP > 0 && $winnerWLP < .25){
-				$loser->addPoints(-1.75);
-			}elseif ($winnerWLP >= .25 && $winnerWLP <= .499){
-				$loser->addPoints(-1.625);
-			}elseif ($winnerWLP >= .5 && $winnerWLP < .75){
-				$loser->addPoints(-1.5);
-			}elseif ($winnerWLP >= .75 && $winnerWLP < 1){
-				$loser->addPoints(-1.375);
-			}else{
-				$loser->addPoints(-1.25);
-			}
 		
 		//loser in over time exchange 
 		if ($ot){
@@ -139,14 +124,32 @@ class perrone extends calculatorBase{
 				$loser->addPoints(.925);
 			}elseif ($winnerWLP >= .5 && $winnerWLP < .75){
 				$loser->addPoints(.95);
-			}elseif ($winnerWLP >= .75 && $winnerWLP < 1){
+			}elseif ($winnerWLP > .75 && $winnerWLP < 1){
 				$loser->addPoints(.975);
 			}else{
 				$loser->addPoints(1.05);
-			}	
+			}
+			
+		}else{
+			// regular loss not in overtime
+		if ($winnerWLP == 0) {
+				$loser->addPoints(-2);
+			}elseif ($winnerWLP > 0 && $winnerWLP < .25){
+				$loser->addPoints(-1.75);
+			}elseif ($winnerWLP >= .25 && $winnerWLP <= .499){
+				$loser->addPoints(-1.625);
+			}elseif ($winnerWLP >= .5 && $winnerWLP < .75){
+				$loser->addPoints(-1.5);
+			}elseif ($winnerWLP > .75 && $winnerWLP < 1){
+				$loser->addPoints(-1.375);
+			}else{
+				$loser->addPoints(-1.25);
+			}
 		}
      }	
   }
 
 }
 ?>
+
+

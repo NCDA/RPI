@@ -19,7 +19,6 @@
 </head>
 <body >
 
-
   <div id="RPI_Holder">
   <form action="perroneDisplay.php" method="post" id="rpi_form">
     <select name="year" value="options">
@@ -46,7 +45,7 @@
 	for($i=0;$i<$PERRONE->League->getNumOfTeams();$i++){
 	  $team =  $PERRONE->League->getTeamByIndex($i) ?>
 	  <tr>
-	 
+
 	   <td> <?php echo $i+1 ?></td>
 		<td class="li_name"><?php echo $team->getName()?></td>
 	    <td class="li_rating"><?php echo number_format($team->getRating(), 5) ?></td>
