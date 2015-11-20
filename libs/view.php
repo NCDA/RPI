@@ -1,6 +1,6 @@
 <?php
 
-require "DBConn.php";
+require "libs/DBConn.php";
 require "libs/teamClasses.php";
 require "libs/League.php";
 
@@ -9,6 +9,7 @@ require "libs/League.php";
 	protected $startYear = 2014;
 	protected $endYear = 2015;
 	public $label;
+	
 	
 	function __construct(){
 		$this->League = new League();
@@ -47,24 +48,35 @@ require "libs/League.php";
 	}
 	
 	// add other functions to allow for specifying teams, scores, and other parameters.
-	protected function populateLeague(){
+	protected function populateLeague(){ 
 		$startDate = $this->startYear . "-08-01";
 		$this->endDate = $this->endYear ."-07-01";
 		$query = "SELECT date, event, event_id, w_team, l_team, w_id, l_id, ot,note, venue FROM results WHERE note not in ('S','JV','JV TIE', 'Ladies\'','Alumni','ASG') and date> '$startDate'  and date<'$this->endDate'";
-	
+		$teamQuery = "SELECT join_id, acronym FROM teams";
 		$results = $this->conn->executeSelectQuery($query);
+		 $teamResults = $this->conn->executeSelectQuery($teamQuery);
+		//store team data into array 
+		$teamArray[0] = "skipped";
+		while($teamData = $teamResults->fetch_assoc()){
+			$teamArray[$teamData["join_id"]] = $teamData["acronym"];
+		}
 	
 		while($row = $results->fetch_assoc()){
 			if($row["event_id"]){ 
-				if(strpos($row["w_team"],'-JV') === false && strpos($row["l_team"],'-JV') === false) {
-					$winIndex = $this->addToLeague($row["w_team"], $row["w_id"]);
-					$loseIndex = $this->addToLeague($row["l_team"], $row["l_id"]);
+			//skip any team that has jv in their name as it denotes a junior varsity game that did not count. 
+				if(strpos($teamArray[$row["w_id"]],'-JV') === false && strpos($teamArray[$row["l_id"]],'-JV') === false) {
+					if($row["w_id"] == 0 || $row["l_id"] == 0){
+						// skip matches that do not count i.e having a win or loss id of 0
+						continue;
+					}
+					$winIndex = $this->addToLeague($teamArray[$row["w_id"]], $row["w_id"]);
+					$loseIndex = $this->addToLeague($teamArray[$row["l_id"]], $row["l_id"]);    
 					//create teamForView to store information about match to parse later and display
-					$wteam = new teamForView($row["w_team"],$row["date"],false,$row["ot"], $row["w_id"]);
-					$lteam = new teamForView($row["l_team"],$row["date"],true,$row["ot"], $row["l_id"]);
+					$wteam = new teamForView($teamArray[$row["w_id"]],$row["date"],false,$row["ot"], $row["w_id"]);
+					$lteam = new teamForView($teamArray[$row["l_id"]],$row["date"],true,$row["ot"], $row["l_id"]);
 					
-					$this->League->getTeamByIndex($this->League->findTeamIndex($row["w_id"]))->addTeamPlayed($lteam);
-					$this->League->getTeamByIndex($this->League->findTeamIndex($row["l_id"]))->addTeamPlayed($wteam);
+					$this->League->getTeamByIndex($winIndex)->addTeamPlayed($lteam);
+					$this->League->getTeamByIndex($loseIndex)->addTeamPlayed($wteam);
 					
 					
 					
@@ -74,7 +86,16 @@ require "libs/League.php";
 		$this->conn->closeConnection();//done with the DB
 	}
 	
-	//display results in order by team 
+	public function sort(){
+		for($i = 0; $i < $this->League->getNumOfTeams()-1; $i++){
+			for($j=0; $j < $this->League->getNumOfTeams()-1; $j++){
+				if($this->League->getTeamByIndex($j)->getId() > $this->League->getTeamByIndex($j+1)->getId()){
+					$this->League->swap($j,$j+1);
+				}
+			}
+		
+		}
+	}
 	
 	
 }

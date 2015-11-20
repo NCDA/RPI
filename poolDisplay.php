@@ -6,7 +6,7 @@ if($_POST){
   } else {
     $VIEW->setStartingSeason("Select season...");
   }
-
+	$VIEW->sort();
 ?>
 
 <!doctype html>
@@ -31,9 +31,10 @@ body {
 
 <body>
 
-<form action="viewDisplay.php" method="post" id="view_form">
+<form action="poolDisplay.php" method="post" id="view_form">
       <select name="year" value="options">
 	<option value="Select season...">Select season...</option>
+	<option value="2015">2015/2016 Season</option>
 	<option value="2014">2014/2015 Season</option>
 	<option value="2013">2013/2014 Season</option>
 	<option value="2012">2012/2013 Season</option>

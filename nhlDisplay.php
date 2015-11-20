@@ -4,7 +4,7 @@
   if($_POST){
     $NHL->setStartingSeason($_POST["year"]);
   } else {
-    $NHL->setStartingSeason("Current Season");
+    $NHL->setStartingSeason("Select season...");
   }
   $NHL->calculate();
 ?>
@@ -12,7 +12,7 @@
 <!doctype html>
 <html>
 <head>
-  <title>NCDA NHL Ratings: <?php echo $NHL->label; ?> season</title>
+  <title>NCDA Champ Points: <?php echo $NHL->label; ?> season</title>
    <LINK href="css/andys_sweet_styles.css" rel="stylesheet" type="text/css">
 </head>
 <body>
@@ -20,6 +20,7 @@
   <form actiom="NHLDisplay.php" method="post" id="NHL_form">
     <select name="year" value="options">
 		<option value="Select season...">Select season...</option>
+		<option value="2015">2015/2016 Season</option>
 		<option value="2014">2014/2015 Season</option>
 		<option value="2013">2013/2014 Season</option>
 		<option value="2012">2012/2013 Season</option>
@@ -28,18 +29,39 @@
     </select>
       <input type="submit" value="Calculate" id="btn_calc">
     </form>
-    <div id="label">NHL ratings for the <?php echo $NHL->label; ?> season.</div>
+    <div id="label">NHL Standings for the <?php echo $NHL->label; ?> season.</div>
 	<table>
+	   <tr>
+		<th>Rank</th>
+		<th>Team</th>
+		<th>Points</th>
+		<th>Games</th>
+		<th>ID</th>
+	   </tr>
       <?php
 	for($i=0;$i<$NHL->League->getNumOfTeams();$i++){
 	  $team =  $NHL->League->getTeamByIndex($i) ?>
-	  <tr>
+	 
+	   <tr>
 	    <td> <?php echo $i+1 ?></td>
 		<td class="li_name"><?php echo $team->getName()?></td>
-	    <td class="li_rating"><?php echo number_format($team->getRating(), 5)?></td>
+	    <td class="li_rating"><?php echo number_format($team->getRating(), 5) ?></td>
+		<td class="li_test"><?php echo $team->getGamesPlayed()?></td>
+		<td class="li_test"><?php echo $team->getId()?></td>
 	  </tr>
+	  
       <?php  } ?>  
     </table>
   </div>
+  <aside>
+	<p>A team's Champ points are determined in the NHL Style. 2 points awarded for a win, 0 points for a loss, and 1 point for a loss in overtime.</p>
+	<p>Tie Breakers:</p>
+	<ol>
+		<li>Greater Champ Points</li>
+		<li>Greater Win Percentage</li>
+		<li>Greater Games Played</li>
+		<li>lower Team ID (older teams get favor as the last tiebreaker)</li>
+	</ol>
+  </aside>
 </body>
 </html>

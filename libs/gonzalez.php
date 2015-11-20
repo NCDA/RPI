@@ -7,11 +7,12 @@
 //updated 03-06-2014 Vanswa Garbutt
 
 require "libs/calculatorBase.php";
-require "DBConn.php";
+require "libs/DBConn.php";
 require "libs/teamClasses.php";
 require "libs/League.php";
 
 class gonzalez extends calculatorBase{
+  protected $teamArray = array();
   
   function __construct(){
     parent::__construct();
@@ -44,22 +45,33 @@ class gonzalez extends calculatorBase{
     $startDate = $this->startYear . "-08-01";
     $this->endDate = $this->endYear ."-07-01";
     $query =  "SELECT date, event, event_id, w_team, l_team, w_id, l_id, ot,note, venue FROM results WHERE note not in ('S','JV','JV TIE', 'Ladies\'','Alumni','ASG') and date> '$startDate'  and date<'$this->endDate'";
-   
+    $teamQuery = "SELECT join_id, acronym FROM teams";
     $results = $this->conn->executeSelectQuery($query);
-    
+    $teamResults = $this->conn->executeSelectQuery($teamQuery);
+	
+	$teamArray[0] = "skipped";
+	//store team data into array 
+	while($teamData = $teamResults->fetch_assoc()){
+		$teamArray[$teamData["join_id"]] = $teamData["acronym"];
+	}
+	
     while($row = $results->fetch_assoc()){  
       if($row["event_id"]){ //if there is an event id there was a game, I'm sure there is a better way to check...	
     	//add the 2 teams into League
     	//check if there was a jv team that played
-      
-      	  $winIndex = $this->addToLeague($row["w_team"], $row["w_id"]);
-      	  $loseIndex = $this->addToLeague($row["l_team"], $row["l_id"]);
+      	if(strpos($teamArray[$row["w_id"]],'-JV') === false && strpos($teamArray[$row["l_id"]],'-JV') === false) {
+			if($row["w_id"] == 0 || $row["l_id"] == 0){
+						// skip matches that do not count i.e having a win or loss id of 0
+						continue;
+					}
+      	  $winIndex = $this->addToLeague($teamArray[$row["w_id"]], $row["w_id"]);
+      	  $loseIndex = $this->addToLeague($teamArray[$row["l_id"]], $row["l_id"]);
 		  //I calculate each game in order from the fetched data in the table
 		 
 		  $record = array($row["venue"],$winIndex,$loseIndex, $row["ot"]);
 		 
 		  $this->updateTeam($record);
-      	
+      	}
       }
     }   
     $this->conn->closeConnection();//done with the DB    

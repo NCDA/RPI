@@ -23,6 +23,7 @@
   <form action="gonzalezDisplay.php" method="post" id="rpi_form">
     <select name="year" value="options">
 		<option value="Select season...">Select season...</option>
+		<option value="2015">2015/2016 Season</option>
 		<option value="2014">2014/2015 Season</option>
 		<option value="2013">2013/2014 Season</option>
 		<option value="2012">2012/2013 Season</option>
@@ -31,8 +32,13 @@
     </select>
       <input type="submit" value="Calculate" id="btn_calc">
     </form>
-    <div id="label">Gonzalez RPI ratings for the <?php echo $GONZALEZ->label; ?> season.</div>
+    <div id="label">Gonzalez Ratings for the <?php echo $GONZALEZ->label; ?> season.</div>
 	<table>
+	   <tr>
+		<th>Rank</th>
+		<th>Team</th>
+		<th>Rating</th>
+	   </tr>	
       <?php
 	for($i=0;$i<$GONZALEZ->League->getNumOfTeams();$i++){
 	  $team =  $GONZALEZ->League->getTeamByIndex($i) ?>
