@@ -6,7 +6,7 @@ if($_POST){
   } else {
     $VIEW->setStartingSeason("Select season...");
   }
-
+	$VIEW->sort();
 ?>
 
 <!doctype html>

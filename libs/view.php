@@ -86,7 +86,16 @@ require "libs/League.php";
 		$this->conn->closeConnection();//done with the DB
 	}
 	
-	//display results in order by team 
+	public function sort(){
+		for($i = 0; $i < $this->League->getNumOfTeams()-1; $i++){
+			for($j=0; $j < $this->League->getNumOfTeams()-1; $j++){
+				if($this->League->getTeamByIndex($j)->getId() > $this->League->getTeamByIndex($j+1)->getId()){
+					$this->League->swap($j,$j+1);
+				}
+			}
+		
+		}
+	}
 	
 	
 }
