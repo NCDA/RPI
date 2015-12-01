@@ -13,7 +13,7 @@ if($_POST){
 <html>
 <head>
 
-<title>NCDA Pool Viewer: <?php echo $VIEW->label; ?> Season</title>
+<title>NCDA Team Opponent Viewer: <?php echo $VIEW->label; ?> Season</title>
 <style>
 body {
 	font-size: 1em;
@@ -64,7 +64,7 @@ body {
  } ?>
  	</table>
 	
-<p>*Listed chronologically on both axes</p>
+<p>*Sorted by team ID. Opponents are chronological.</p>
  
  </body>
  </html>
