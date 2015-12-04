@@ -1,0 +1,11 @@
+*** change the Leagues team array to use pointers****
+
+add team to league
+  check is team is already in league
+    if so, do nothing
+    else, push team into league
+	  get the teams index in the league array
+
+update team
+  add win or loss
+  add pointer to team played in teamsPlayed array
