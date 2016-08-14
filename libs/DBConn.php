@@ -1,10 +1,10 @@
 <?php
 
 class DBConn{
-  private $dbHost = "db453621215.db.1and1.com";
-  private $dbUsername = "dbo453621215";
-  private $dbPass = "dojjiboru";
-  private $dbName = "db453621215";
+  private $dbHost = "dbHost";
+  private $dbUsername = "dbUsername";
+  private $dbPass = "dbPass";
+  private $dbName = "dbName";
   private $db;
   
   function __construct(){
